@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 import os
 # Create your models here.
 
@@ -7,7 +7,8 @@ import os
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('Users must have an email addres')
+            raise ValueError('Users must have an email address')
+
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
 
@@ -26,17 +27,18 @@ class UserAccountManager(BaseUserManager):
         return user
 
 
-class UserAccount(AbstractUser, PermissionsMixin):
+class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name', ]
 
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
