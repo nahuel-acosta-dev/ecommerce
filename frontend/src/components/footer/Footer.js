@@ -44,7 +44,7 @@ const Footer = () => {
                     <h5>Subscribe to our newsletter</h5>
                     <p>Monthly digest of whats new and exciting from us.</p>
                     <div className="d-flex w-100 gap-2">
-                    <label for="newsletter1" className="visually-hidden">Email address</label>
+                    <label htmlFor="newsletter1" className="visually-hidden">Email address</label>
                     <input id="newsletter1" type="text" className="form-control" placeholder="Email address"/>
                     <button className="btn btn-primary" type="button">Subscribe</button>
                     </div>
@@ -55,9 +55,9 @@ const Footer = () => {
             <div className="d-flex justify-content-between py-4 my-4 border-top">
                 <p>© 2021 Company, Inc. All rights reserved.</p>
                 <ul className="list-unstyled d-flex">
-                <li className="ms-3"><a className="link-dark" href="http"><i class="bi bi-twitter"></i></a></li>
-                <li className="ms-3"><a className="link-dark" href="http"><i class="bi bi-instagram"></i></a></li>
-                <li className="ms-3"><a className="link-dark" href="http"><i class="bi bi-facebook"></i></a></li>
+                <li className="ms-3"><a className="link-dark" href="http"><i className="bi bi-twitter"></i></a></li>
+                <li className="ms-3"><a className="link-dark" href="http"><i className="bi bi-instagram"></i></a></li>
+                <li className="ms-3"><a className="link-dark" href="http"><i className="bi bi-facebook"></i></a></li>
                 </ul>
             </div>
         </footer>
