@@ -1,10 +1,42 @@
 import React from 'react';
-import {Button, Col, Container, Form, Navbar, Nav, NavDropdown, Row} from 'react-bootstrap';
+import {Button, Container, Form, Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
+import CustomAlert from '../extras/CustomAlert';
  
-const CustomNavbar = () => {
+const CustomNavbar = ({
+  isAuthenticated,
+  user
+}) => {
+
+  const authLinks = () => {
+    return(
+      <NavDropdown title="Dropdown" id="basic-nav-dropdown" variant="success"
+      style={{color: 'white'}}
+      >
+        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.2">
+          Another action
+        </NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+        <NavDropdown.Divider />
+        <NavDropdown.Item href="#action/3.4">
+          Separated link
+        </NavDropdown.Item>
+      </NavDropdown>)
+  }
+
+  const guestLinks = () => {
+    return(
+      <Form className="d-flex">
+        <Button variant="outline-info" style={{'marginRight': "10px"}}>Sign in</Button>
+        <Button variant="primary">Sign up</Button>
+      </Form>
+    )
+  }
 
     return(
+      <>
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="/">
@@ -34,14 +66,26 @@ const CustomNavbar = () => {
               <Link to="/login" className="nav-link">Login</Link>
             </li>
           </Nav>
-          <Form className="d-flex">
-            <Button variant="outline-info" style={{'marginRight': "10px"}}>Sign in</Button>
-            <Button variant="primary">Sign up</Button>
-          </Form>
+          {
+            isAuthenticated ?
+            authLinks()
+            :
+            guestLinks()
+          }
         </Navbar.Collapse>
         </Container>
       </Navbar>
+      <CustomAlert />
+      </>
     )
 }
 
-export default CustomNavbar;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.Auth.isAuthenticated,
+  user: state.Auth.user
+})
+
+
+export default connect(mapStateToProps,{
+
+})(CustomNavbar);

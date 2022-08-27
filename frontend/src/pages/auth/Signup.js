@@ -44,6 +44,7 @@ const Signup = ({signup}) => {
             re_password
         )
         setAccountCreated(true);
+        window.scrollTo(0, 0);
     }
 
     console.log(process.env.REACT_APP_API_URL)
