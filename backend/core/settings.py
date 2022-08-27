@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from urllib.parse import quote
 from datetime import timedelta
 import environ
 from .db import MYSQL
@@ -23,7 +24,6 @@ django.utils.encoding.force_text = force_str
 ##########
 
 # solucion error urlquote
-from urllib.parse import quote 
 django.utils.http.urlquote = quote
 ##########
 
@@ -204,7 +204,7 @@ AUTHENTICATION_BACKENDS = (
 ################################
 # CONFIG JWT
 ################################
-
+"""
 SIMPLE_JWT = {
     # cambiar a 5 al terminar desarrollo
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
@@ -238,6 +238,17 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}"""
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT', ),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESFH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_TOKEN_CLASSES': (
+        'rest_framework_simplejwt.tokens.AccessToken',
+    )
 }
 
 DJOSER = {
