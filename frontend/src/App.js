@@ -9,6 +9,8 @@ import Error404 from './pages/errors/Error404';
 import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
 import Activate from './pages/auth/Activate';
+import ResetPassword from './pages/auth/ResetPassword';
+import ResetPasswordConfirm from './pages/auth/ResetPasswordConfirm';
 
 function App() {
   return (
@@ -23,7 +25,9 @@ function App() {
           <Route exact path='/signup' element={<Signup/>}/>
           <Route exact path='/login' element={<Login/>}/>
           <Route exact path='/activate/:uid/:token' element={<Activate/>}/>
-        
+          <Route exact path='/reset_password' element={<ResetPassword/>}/>
+          <Route exact path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>}/>
+
         </Routes>
       </Router>
     </Provider>

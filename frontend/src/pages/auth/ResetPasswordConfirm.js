@@ -2,27 +2,29 @@ import React, {useState, useEffect} from 'react';
 import Layout from '../../hocs/Layout';
 import {Button, Container, Form, Spinner} from 'react-bootstrap'; 
 import {connect} from 'react-redux';
-import { login } from '../../redux/actions/auth';
-import { Navigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { reset_password_confirm } from '../../redux/actions/auth';
+import { Navigate, useParams } from 'react-router';
 
-const Login = ({login, loading}) => {
+
+const ResetPasswordConfirm = ({reset_password_confirm, loading}) => {
+
+    const params = useParams();
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
+        new_password: '',
+        re_new_password: ''
       })
     
       const { 
-        email,
-        password,
+        new_password,
+        re_new_password
       } = formData;
 
-      const [accessAcount, setAccessAcount] = useState(false);
+      const [requestSent, setRequestSent] = useState(false);
     
       const onChange = e => setFormData({ 
         ...formData, 
@@ -31,42 +33,39 @@ const Login = ({login, loading}) => {
 
     const onSubmit = e => {
         e.preventDefault();
-        console.log(formData);
-        login(
-            email,
-            password,
-        )
-        setAccessAcount(true);
-        window.scrollTo(0, 0);
+        const uid = params.uid;
+        const token = params.token;
+
+        reset_password_confirm(uid, token, new_password, re_new_password);
+        if(new_password === re_new_password){
+            setRequestSent(true);
+        }
+    }
+
+    if(requestSent && !loading){
+        return <Navigate to="/" />
     }
 
     return (
         <Layout>
             <Container>
                 <Form onSubmit={e => onSubmit(e)}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" name="email"
-                        value={email} onChange={e => onChange(e)}
-                        />
-                        <Form.Text className="text-muted">
-                            We'll never share your email with anyone else.
-                        </Form.Text>
-                    </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" name="password"
-                        value={password} onChange={e => onChange(e)}
+                        <Form.Control type="password" placeholder="Password" name="new_password"
+                        value={new_password} onChange={e => onChange(e)}
                         />
                     </Form.Group>
-                    <Link className="mb-3" controlId="formBasicCheckbox" to="/reset_password">
-                        ¿Olvido su contraseña?
-                    </Link>
-                    <br/>
+                    <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+                        <Form.Label>Repeat Password</Form.Label>
+                        <Form.Control type="password" placeholder="Confirm Password" name="re_new_password"
+                        value={re_new_password} onChange={e => onChange(e)}
+                        />
+                    </Form.Group>
                     <hr/>
                     {!loading ?
                         <Button variant="primary" type="submit">
-                            Submit
+                            Cambiar Contraseña
                         </Button>
                     :    
                     <Button variant="primary">
@@ -84,7 +83,6 @@ const Login = ({login, loading}) => {
 const mapStateToProps = (state) => ({
     loading: state.Auth.loading
 })
-
 export default connect(mapStateToProps, {
-    login
-}) (Login);
+    reset_password_confirm
+}) (ResetPasswordConfirm);

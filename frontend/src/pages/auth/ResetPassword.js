@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react';
 import Layout from '../../hocs/Layout';
 import {Button, Container, Form, Spinner} from 'react-bootstrap'; 
 import {connect} from 'react-redux';
-import { login } from '../../redux/actions/auth';
+import { reset_password } from '../../redux/actions/auth';
 import { Navigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-const Login = ({login, loading}) => {
+const ResetPassword = ({reset_password, loading}) => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -14,15 +14,13 @@ const Login = ({login, loading}) => {
 
     const [formData, setFormData] = useState({
         email: '',
-        password: '',
       })
     
       const { 
         email,
-        password,
       } = formData;
 
-      const [accessAcount, setAccessAcount] = useState(false);
+      const [requestSent, setRequestSent] = useState(false);
     
       const onChange = e => setFormData({ 
         ...formData, 
@@ -31,13 +29,12 @@ const Login = ({login, loading}) => {
 
     const onSubmit = e => {
         e.preventDefault();
-        console.log(formData);
-        login(
-            email,
-            password,
-        )
-        setAccessAcount(true);
-        window.scrollTo(0, 0);
+        reset_password(email);
+        setRequestSent(true);
+    }
+
+    if(requestSent && !loading) {
+        return <Navigate to="/" />
     }
 
     return (
@@ -53,20 +50,10 @@ const Login = ({login, loading}) => {
                             We'll never share your email with anyone else.
                         </Form.Text>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" name="password"
-                        value={password} onChange={e => onChange(e)}
-                        />
-                    </Form.Group>
-                    <Link className="mb-3" controlId="formBasicCheckbox" to="/reset_password">
-                        ¿Olvido su contraseña?
-                    </Link>
-                    <br/>
                     <hr/>
                     {!loading ?
                         <Button variant="primary" type="submit">
-                            Submit
+                            Enviar Email
                         </Button>
                     :    
                     <Button variant="primary">
@@ -84,7 +71,6 @@ const Login = ({login, loading}) => {
 const mapStateToProps = (state) => ({
     loading: state.Auth.loading
 })
-
 export default connect(mapStateToProps, {
-    login
-}) (Login);
+    reset_password
+}) (ResetPassword);
