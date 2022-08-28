@@ -1,13 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Container, Form, Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import {Navigate} from 'react-router';
 import {connect} from 'react-redux';
+import {logout} from '../../redux/actions/auth';
 import CustomAlert from '../extras/CustomAlert';
  
 const CustomNavbar = ({
   isAuthenticated,
-  user
+  user, 
+  logout
 }) => {
+
+  const [redirect, setRedirect] = useState(false);
+
+  const logoutHandler = () => {
+    logout();
+    setRedirect(true);
+  }
+
+  if(redirect) {
+    return <Navigate to="/" />
+  }
 
   const authLinks = () => {
     return(
@@ -20,9 +34,12 @@ const CustomNavbar = ({
         </NavDropdown.Item>
         <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
         <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">
-          Separated link
-        </NavDropdown.Item>
+        <Button 
+        onClick={logoutHandler}
+        variant="link" 
+        className="text-decoration-none text-dark">
+          Sign Out
+        </Button>
       </NavDropdown>)
   }
 
@@ -87,5 +104,5 @@ const mapStateToProps = (state) => ({
 
 
 export default connect(mapStateToProps,{
-
+  logout
 })(CustomNavbar);

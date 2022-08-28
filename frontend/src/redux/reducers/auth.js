@@ -1,5 +1,5 @@
-import { 
-    SIGNUP_SUCCESS, 
+import {
+    SIGNUP_SUCCESS,
     SIGNUP_FAIL,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
@@ -12,10 +12,9 @@ import {
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
     REFRESH_SUCCESS,
-    REFRESH_FAIL 
-
+    REFRESH_FAIL,
+    LOGOUT
 } from '../actions/types';
-import axios from 'axios'; 
 
 const initialState = {
     access: localStorage.getItem('access'),
@@ -25,39 +24,39 @@ const initialState = {
     loading: false
 }
 
-export default function Auth(state = initialState, action){
-    const {type, payload} = action;
+export default function Auth(state = initialState, action) {
+    const { type, payload } = action;
 
-    switch(type){
+    switch (type) {
         case SET_AUTH_LOADING:
-            return{
+            return {
                 ...state,
                 loading: true
             }
-        case REMOVE_AUTH_LOADING: 
-            return{
+        case REMOVE_AUTH_LOADING:
+            return {
                 ...state,
                 loading: false
             }
         case USER_LOADED_SUCCESS:
-            return{
+            return {
                 ...state,
                 user: payload
             }
         case USER_LOADED_FAIL:
-            return{
+            return {
                 ...state,
                 user: null
             }
         case AUTHENTICATED_SUCCESS:
-            return{
+            return {
                 ...state,
                 isAuthenticated: true
             }
         case AUTHENTICATED_FAIL:
             localStorage.removeItem('access');
             localStorage.removeItem('refresh');
-            return{
+            return {
                 ...state,
                 isAuthenticated: false,
                 access: null,
@@ -66,7 +65,7 @@ export default function Auth(state = initialState, action){
         case LOGIN_SUCCESS:
             localStorage.setItem('access', payload.access);
             localStorage.setItem('refresh', payload.refresh);
-            return{
+            return {
                 ...state,
                 isAuthenticated: true,
                 access: localStorage.getItem('access'),
@@ -74,21 +73,21 @@ export default function Auth(state = initialState, action){
             }
         case ACTIVATION_SUCCESS:
         case ACTIVATION_FAIL:
-            return{
+            return {
                 ...state
             }
-        
+
         case REFRESH_SUCCESS:
             localStorage.setItem('access', payload.access);
             return {
                 ...state,
                 access: localStorage.getItem('access')
             }
-
         case SIGNUP_SUCCESS:
-        case SIGNUP_FAIL: 
+        case SIGNUP_FAIL:
         case LOGIN_FAIL:
         case REFRESH_FAIL:
+        case LOGOUT:
             localStorage.removeItem('access')
             localStorage.removeItem('refresh')
             return {

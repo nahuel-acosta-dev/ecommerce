@@ -12,7 +12,8 @@ import {
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
     REFRESH_SUCCESS,
-    REFRESH_FAIL
+    REFRESH_FAIL,
+    LOGOUT
 } from './types';
 import { setAlert } from './alert';
 import axios from 'axios';
@@ -308,3 +309,11 @@ export const refresh = () => async dispatch => {
     }
 }
 
+
+export const logout = () => async dispatch => {
+    dispatch({
+        type: LOGOUT
+    });
+
+    dispatch(setAlert('Successfully logged out', 'success'))
+}
