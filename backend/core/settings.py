@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+
 from urllib.parse import quote
 from datetime import timedelta
 import environ
@@ -60,7 +61,7 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = ['apps.user']
-ECOMMERCE_APPS = []
+ECOMMERCE_APPS = ['apps.category']
 THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
