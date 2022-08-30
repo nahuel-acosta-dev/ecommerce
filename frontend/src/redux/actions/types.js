@@ -28,3 +28,6 @@ export const LOGOUT = "LOGOUT";
 
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
+
+export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
+export const GET_CATEGORIES_FAIL = 'GET_CATEGORIES_FAIL';

@@ -74,7 +74,10 @@ const CustomNavbar = ({
             navbarScroll
           >
             <li className="nav-item">
-              <Link to="/signup" className="nav-link active">Home</Link>
+              <Link to="/" className="nav-link active">Home</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/shop" className="nav-link">Shop</Link>
             </li>
             <li className="nav-item">
               <Link to="/signup" className="nav-link">Signup</Link>

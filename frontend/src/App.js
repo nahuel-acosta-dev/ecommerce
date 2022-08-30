@@ -12,12 +12,15 @@ import Activate from './pages/auth/Activate';
 import ResetPassword from './pages/auth/ResetPassword';
 import ResetPasswordConfirm from './pages/auth/ResetPasswordConfirm';
 
+import Shop from './pages/Shop';
+
 function App() {
   return (
     <Provider store={store}>
       <Router>
         <Routes>
           {/*Error Display*/}
+          {/*es importante que siempre este arriba*/}
           <Route path='*' element={<Error404/>}/>
           <Route exact path='/' element={<Home/>}/>
 
@@ -27,7 +30,7 @@ function App() {
           <Route exact path='/activate/:uid/:token' element={<Activate/>}/>
           <Route exact path='/reset_password' element={<ResetPassword/>}/>
           <Route exact path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>}/>
-
+          <Route exact path='/shop' element={<Shop/>}/>
         </Routes>
       </Router>
     </Provider>
