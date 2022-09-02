@@ -15,10 +15,6 @@ const Home = ({
     products_sold
 }) => {
 
-    console.log(products_arrival)
-
-    console.log(products_sold)
-
     useEffect(() => {
         window.scrollTo(0, 0);
 
@@ -34,7 +30,7 @@ const Home = ({
                     <Col xs={6}>
                         Lo mas Reciente
                         {products_arrival && products_arrival.map((product, i) => (
-                            <Card key={i} name={product.name} description={product.description} 
+                            <Card key={i} id={product.id} name={product.name} description={product.description} 
                             img={product.get_thumbnail} price={product.price} comparePrice={product.compare_price}/>
                         ))
 
@@ -43,7 +39,7 @@ const Home = ({
                     <Col xs={6}>
                         Lo mas vendido
                         {products_sold && products_sold.map((product, i) => (
-                            <Card key={i} name={product.name} description={product.description} 
+                            <Card key={i} id={product.id} name={product.name} description={product.description} 
                             img={product.get_thumbnail} price={product.price} comparePrice={product.compare_price}/>
                         ))
 

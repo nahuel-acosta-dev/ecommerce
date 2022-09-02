@@ -1,6 +1,8 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
-const Card = ({name, description, img, price, comparePrice}) => {
+
+const Card = ({id, name, description, img, price, comparePrice}) => {
 
     return(
         <>
@@ -23,8 +25,8 @@ const Card = ({name, description, img, price, comparePrice}) => {
                 </div>
                     </div>
                 <div className="text-small mb-1"><a href="#!" className="text-decoration-none text-muted"><small>{name}</small></a></div>
-                <h2 className="fs-6"><a href="../../pages/shop-single.html" className="text-inherit text-decoration-none">Haldiram's
-                    Sev Bhujia</a></h2>
+                <h2 className="fs-6"><Link to={`product/${id}`} className="text-inherit text-decoration-none">Haldiram's
+                    Sev Bhujia</Link></h2>
                 <div>
                 <small className="text-warning"> <i className="bi bi-star-fill"></i>
                 <i className="bi bi-star-fill"></i>
@@ -49,5 +51,7 @@ const Card = ({name, description, img, price, comparePrice}) => {
         </>
     )
 }
+
+
 
 export default Card;

@@ -29,8 +29,6 @@ const initialState = {
 export default function Products(state = initialState, actions) {
     const { type, payload } = actions;
 
-    console.log(payload)
-
     switch(type) {
         case GET_PRODUCTS_SUCCESS:
             return {
