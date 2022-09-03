@@ -15,6 +15,7 @@ const ProductDetail = ({
     const productId = params.productId;
     
     useEffect(() => {
+        window.scrollTo(0, 0);
         get_product(productId);
         get_related_products(productId);
     }, [])
@@ -32,7 +33,7 @@ const ProductDetail = ({
         </Layout>
     )
 }
-
+//Functionalities to obtain finished products
 const mapStateToProps = state => ({
     product: state.Products.product
 })
