@@ -4,6 +4,7 @@ import {useParams} from 'react-router';
 import {connect} from 'react-redux';
 import { get_product, get_related_products } from '../redux/actions/products';
 import Detail from '../components/shop/Detail';
+import {Spinner} from 'react-bootstrap';
 
 const ProductDetail = ({
     get_product,
@@ -20,9 +21,14 @@ const ProductDetail = ({
 
     console.log(product)
     return(
-        <Layout>
+        <Layout>{product ?
             <Detail name={product.name} img={product.get_thumbnail} price={product.price} 
             comparePrice={product.compare_price}/>
+            :
+            <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+        }
         </Layout>
     )
 }
