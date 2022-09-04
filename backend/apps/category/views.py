@@ -10,7 +10,7 @@ from .models import Category
 
 
 class ListCategoriesView(APIView):
-    permissions_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.AllowAny, )
 
     def get(self, request, format=None):
         if Category.objects.all().exists():
@@ -34,6 +34,6 @@ class ListCategoriesView(APIView):
 
                             item['sub_categories'].append(sub_item)
                     result.append(item)
-                return Response({'categories': result}, status=status.HTTP_200_OK)
+            return Response({'categories': result}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': 'Not categories fount'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': 'No categories found'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
