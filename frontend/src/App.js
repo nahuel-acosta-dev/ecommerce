@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import Error404 from './pages/errors/Error404';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
+import Search from './pages/Search';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route exact path='/password/reset/confirm/:uid/:token' element={<ResetPasswordConfirm/>}/>
           <Route exact path='/shop' element={<Shop/>}/>
           <Route exact path='/product/:productId' element={<ProductDetail/>}/>
+          <Route exact path='/search' element={<Search/>}/>
         </Routes>
       </Router>
     </Provider>

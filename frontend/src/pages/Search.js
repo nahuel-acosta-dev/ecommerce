@@ -10,20 +10,15 @@ import Card from '../components/shop/Card';
 
 import Ball from '../img/balls.jpg';
 import Categories from '../components/shop/Categories'
-import Store from '../components/shop/Store';
-import Price from '../components/shop/Price';
-import Rating from '../components/shop/Rating';
 
-const Shop = ({get_categories, 
+const Search = ({get_categories, 
     categories, 
     get_products, 
     products,
     get_filtered_products,
-    filtered_products
+    searched_products
 
 }) => {
-
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [filtered, setFiltered] = useState(false);
     const [formData, setFormData] = useState({
         category_id: '0',
@@ -46,6 +41,7 @@ const Shop = ({get_categories,
     }, [])
 
     const onChange = e => setFormData({...formData, [e.target.name]: e.target.value});
+
     const submit = e => {
         e.preventDefault();
         get_filtered_products(category_id, price_range, sortBy, order);
@@ -56,22 +52,10 @@ const Shop = ({get_categories,
         let results = [];
         let display = [];
 
-        if (filtered_products && filtered_products !== null
-            && filtered_products !== undefined && filtered) {
-                filtered_products.map((product, i) => {
-                    return display.push(
-                        <Col key={i}>
-                           <Card key={i} id={product.id} name={product.name} description={product.description} 
-                            img={product.get_thumbnail} price={product.price} comparePrice={product.compare_price}/>
-                        </Col>
-                    )
-                })
-            }
-        else if(!filtered && products &&
-                products !== null && 
-                products !== undefined
-            ){
-                products.map((product, i) => {
+        if (searched_products && 
+            searched_products !== null && 
+            searched_products !== undefined) {
+                searched_products.map((product, i) => {
                     return display.push(
                         <Col key={i}>
                            <Card key={i} id={product.id} name={product.name} description={product.description} 
@@ -98,18 +82,14 @@ const Shop = ({get_categories,
         <Layout>
         <Row>
             <div className="offset-lg-1 col-lg-3 col-12">
-                <Categories categories={categories} name="categories"/>
-                <Store />
-                <Price />
-                <Rating />
-                
+                <Categories categories={categories} name={`Buscaste:`}/>
                 <div className="mb-8 position-relative">
                     {/*<!-- Banner Design -->*/}
                     {/*<!-- Banner Content -->*/}
                     <div className="position-absolute p-5 py-8">
                     <h3 className="mb-0">Fresh Fruits </h3>
                     <p>Get Upto 25% Off</p>
-                    <a href="#" className="btn btn-dark">Shop Now<i className="feather-icon icon-arrow-right ms-1"></i></a>
+                    <a href="/" className="btn btn-dark">Shop Now<i className="feather-icon icon-arrow-right ms-1"></i></a>
                     </div>
                     {/*<!-- Banner Content -->*/}
                     {/*<!-- Banner Image -->*/}
@@ -117,9 +97,6 @@ const Shop = ({get_categories,
                     <img src={Ball} alt=""
                     className="img-fluid rounded-3"/>
                     {/*<!-- Banner Image -->*/}
-
-                    
-
                 </div>
             </div>
             <Col>
@@ -133,6 +110,7 @@ const Shop = ({get_categories,
 const mapStateToProps = state => ({
     categories: state.Categories.categories,
     products: state.Products.products,
+    searched_products: state.Products.search_products,
     filtered_products: state.Products.filtered_products
 })
 
@@ -140,4 +118,4 @@ export default connect(mapStateToProps,{
     get_categories, 
     get_products,
     get_filtered_products
-}) (Shop);
+}) (Search);

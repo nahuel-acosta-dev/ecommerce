@@ -10,8 +10,8 @@ const Rating = () => {
                {/*<!-- form check -->*/}
                <div className="form-check mb-2">
                   {/*<!-- input -->*/}
-                  <input className="form-check-input" type="checkbox" value="" id="ratingFive"/>
-                  <label className="form-check-label" for="ratingFive">
+                  <input defaultChecked={true} className="form-check-input" type="checkbox" value="" id="ratingFive"/>
+                  <label className="form-check-label" htmlFor="ratingFive">
                   <i className="bi bi-star-fill text-warning"></i>
                   <i className="bi bi-star-fill text-warning "></i>
                   <i className="bi bi-star-fill text-warning "></i>
@@ -22,8 +22,8 @@ const Rating = () => {
                {/*<!-- form check -->*/}
                <div className="form-check mb-2">
                   {/*<!-- input -->*/}
-                  <input className="form-check-input" type="checkbox" value="" id="ratingFour" checked/>
-                  <label className="form-check-label" for="ratingFour">
+                  <input defaultChecked={true} className="form-check-input" type="checkbox" value="" id="ratingFour" checked/>
+                  <label className="form-check-label" htmlFor="ratingFour">
                   <i className="bi bi-star-fill text-warning"></i>
                   <i className="bi bi-star-fill text-warning "></i>
                   <i className="bi bi-star-fill text-warning "></i>
@@ -34,8 +34,8 @@ const Rating = () => {
                {/*<!-- form check -->*/}
                <div className="form-check mb-2">
                   {/*<!-- input -->*/}
-                  <input className="form-check-input" type="checkbox" value="" id="ratingThree"/>
-                  <label className="form-check-label" for="ratingThree">
+                  <input defaultChecked={true} className="form-check-input" type="checkbox" value="" id="ratingThree"/>
+                  <label className="form-check-label" htmlFor="ratingThree">
                   <i className="bi bi-star-fill text-warning"></i>
                   <i className="bi bi-star-fill text-warning "></i>
                   <i className="bi bi-star-fill text-warning "></i>
@@ -46,8 +46,8 @@ const Rating = () => {
                {/*<!-- form check -->*/}
                <div className="form-check mb-2">
                   {/*<!-- input -->*/}
-                  <input className="form-check-input" type="checkbox" value="" id="ratingTwo"/>
-                  <label className="form-check-label" for="ratingTwo">
+                  <input defaultChecked={true} className="form-check-input" type="checkbox" value="" id="ratingTwo"/>
+                  <label className="form-check-label" htmlFor="ratingTwo">
                   <i className="bi bi-star-fill text-warning"></i>
                   <i className="bi bi-star-fill text-warning"></i>
                   <i className="bi bi-star text-warning"></i>
@@ -58,8 +58,8 @@ const Rating = () => {
                {/*<!-- form check -->*/}
                <div className="form-check mb-2">
                   {/*<!-- input -->*/}
-                  <input className="form-check-input" type="checkbox" value="" id="ratingOne"/>
-                  <label className="form-check-label" for="ratingOne">
+                  <input defaultChecked={true} className="form-check-input" type="checkbox" value="" id="ratingOne"/>
+                  <label className="form-check-label" htmlFor="ratingOne">
                   <i className="bi bi-star-fill text-warning"></i>
                   <i className="bi bi-star text-warning"></i>
                   <i className="bi bi-star text-warning"></i>

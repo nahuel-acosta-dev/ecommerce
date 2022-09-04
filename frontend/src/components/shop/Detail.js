@@ -97,10 +97,10 @@ const Details = ({name,img, price, comparePrice}) => {
                 </div>
                 <div>
                 {/*<!-- input -->*/}
-                <div className="input-group input-spinner  ">
-                    <input type="button" defaultValue="-" className="button-minus  btn  btn-sm " data-field="quantity"/>
-                    <input type="number" step="1" max="10" defaultValue="1" name="quantity" className="quantity-field form-control-sm form-input"/>
-                    <input type="button" defaultValue="+" className="button-plus btn btn-sm " data-field="quantity"/>
+                <div className="input-group input-spinner">
+                    <input defaultChecked={true} type="button" defaultValue="-" className="button-minus  btn  btn-sm " data-field="quantity"/>
+                    <input defaultChecked={true} type="number" step="1" max="10" defaultValue="1" name="quantity" className="quantity-field form-control-sm form-input"/>
+                    <input defaultChecked={true} type="button" defaultValue="+" className="button-plus btn btn-sm " data-field="quantity"/>
                 </div>
                 </div>
                 <div className="mt-3 row justify-content-start g-2 align-items-center">
