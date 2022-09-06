@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -8,7 +7,6 @@ from apps.product.serializers import ProductSerializer
 from apps.category.models import Category
 
 from django.db.models import Q
-# Create your views here.
 
 
 class ProductDetailView(APIView):

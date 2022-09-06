@@ -7,6 +7,8 @@ from .models import Cart, CartItem
 from apps.product.models import Product
 from apps.product.serializers import ProductSerializer
 
+# en estas vistas se necesita que el usuario este autenticado para poder obtener los datos
+
 
 class GetItemsView(APIView):
     def get(self, request, format=None):
