@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import Layout from '../hocs/Layout';
 import CartItem from '../components/shop/CartItem';
+import WishlistItems from '../components/shop/WishListItems';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {Row, Col} from 'react-bootstrap';
@@ -20,7 +21,9 @@ const Cart = ({
     items,
     amount,
     compare_amount,
-    total_items
+    total_items,
+    remove_item,
+    update_item,
 }) => {
     
     const [render, setRender] = useState(false);
@@ -47,15 +50,16 @@ const Cart = ({
                         items !== undefined &&
                         items.length !== 0 &&
                         items.map((item, i) => 
-                        <CartItem key={i} 
-                                item={item}
-                                count={item.count}
-                                update_item={update_item}
-                                remove_item={remove_item}
-                                render={render}
-                                setRender={setRender}
-                                />
-                                )
+                        <CartItem 
+                            key={i} 
+                            item={item}
+                            count={item.count}
+                            update_item={update_item}
+                            remove_item={remove_item}
+                            render={render}
+                            setRender={setRender}
+                            />
+                        )
                     }
 
                     <div className="d-flex justify-content-between mt-4">
@@ -80,7 +84,7 @@ const Cart = ({
             )
         }
         else{
-            <Link to="/checkout">Buscar productos para comprar</Link>
+           return (<Link to="/checkout">Buscar productos para comprar</Link>)
         }
     }
     
@@ -93,6 +97,7 @@ const Cart = ({
                 </Col>
                 <Col className="text-center">
                     {checkoutButton()}
+                    <WishlistItems/>
                 </Col>
             </Row>
         </Layout>

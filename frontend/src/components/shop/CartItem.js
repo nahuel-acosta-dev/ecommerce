@@ -127,6 +127,12 @@ const CartItem = ({
                         />
                         </div>
                     </div>
+                    <Button 
+                        type="submit"
+                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                    >
+                        <span className="mx-2">Update Item</span>
+                    </Button>
                     {/*<!-- price -->*/}
                     <div className="col-2 text-lg-end text-start text-md-end col-md-2">
                         <span className="fw-bold">$5.00</span>

@@ -25,7 +25,6 @@ import {
     SYNCH_CART_FAIL,
 } from './types';
 
-//se necesita estar logueado para acceder a las funciones
 
 export const add_item = product => async dispatch => {
     if (localStorage.getItem('access')) {
@@ -68,7 +67,7 @@ export const add_item = product => async dispatch => {
 
         let shouldAddItem = true;
 
-        cart.map((item) => {
+        cart.map(item => {
             if (product.id.toString() === item.product.id.toString()) {
                 shouldAddItem = false;
             }
