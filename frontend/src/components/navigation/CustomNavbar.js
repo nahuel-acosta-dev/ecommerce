@@ -118,6 +118,9 @@ const CustomNavbar = ({
               <Link to="/shop" className="nav-link">Shop</Link>
             </li>
             <li className="nav-item">
+              <Link to="/cart" className="nav-link">Cart</Link>
+            </li>
+            <li className="nav-item">
               <Link to="/signup" className="nav-link">Signup</Link>
             </li>
             <li className="nav-item">

@@ -1,10 +1,20 @@
 import React from 'react';
+import {Form, Spinner} from 'react-bootstrap';
 
-const Details = ({name,img, price, comparePrice}) => {
 
+const Details = ({
+    name,
+    img, 
+    price, 
+    comparePrice,
+    quantity,
+    addToCart,
+    loading
+}) => {
     const zoom = (e) => {
         return false;
     }
+
 
     return(
         <div className="row">
@@ -76,45 +86,72 @@ const Details = ({name,img, price, comparePrice}) => {
                 {/*<!-- heading -->*/}
                 <h1 className="mb-1">{name}</h1>
                 <div className="mb-4">
-                {/*<!-- rating -->*/}
-                {/*<!-- rating -->*/} <small className="text-warning"> <i className="bi bi-star-fill"></i>
-                <i className="bi bi-star-fill"></i>
-                <i className="bi bi-star-fill"></i>
-                <i className="bi bi-star-fill"></i>
-                <i className="bi bi-star-half"></i></small><a href="/" className="ms-2">(30 reviews)</a>
+                {/*<!-- rating -->*/} 
+                    <small className="text-warning"> 
+                        <i className="bi bi-star-fill"></i>
+                        <i className="bi bi-star-fill"></i>
+                        <i className="bi bi-star-fill"></i>
+                        <i className="bi bi-star-fill"></i>
+                        <i className="bi bi-star-half"></i>
+                    </small>
+                <a href="/" className="ms-2">(30 reviews)</a>
                 </div>
-                <div className="fs-4">
-                {/*<!-- price -->*/}<span className="fw-bold text-dark">{price}</span> <span
-                    className="text-decoration-line-through text-muted">{comparePrice}</span><span><small className="fs-6 ms-2 text-danger">26%
-                Off</small></span>
-                </div>
-               {/*<!-- hr -->*/}
-                <hr className="my-6"/>
-                <div className="mb-5">
-                <button type="button" className="btn btn-outline-secondary">250g</button>
-                {/*<!-- btn -->*/} <button type="button" className="btn btn-outline-secondary">500g</button>
-                {/*<!-- btn -->*/} <button type="button" className="btn btn-outline-secondary">1kg</button>
-                </div>
-                <div>
-                {/*<!-- input -->*/}
-                <div className="input-group input-spinner">
-                    <input defaultChecked={true} type="button" defaultValue="-" className="button-minus  btn  btn-sm " data-field="quantity"/>
-                    <input defaultChecked={true} type="number" step="1" max="10" defaultValue="1" name="quantity" className="quantity-field form-control-sm form-input"/>
-                    <input defaultChecked={true} type="button" defaultValue="+" className="button-plus btn btn-sm " data-field="quantity"/>
-                </div>
-                </div>
-                <div className="mt-3 row justify-content-start g-2 align-items-center">
-                <div className="col-xxl-4 col-lg-4 col-md-5 col-5 d-grid">
-                    {/*<!-- button -->*/}
-                    {/*<!-- btn -->*/} <button type="button" className="btn btn-primary"><i className="feather-icon icon-shopping-bag me-2"></i>Add to
-                    cart</button>
-                </div>
-                <div className="col-md-4 col-4">
-                    {/*<!-- btn -->*/}
-                    <a className="btn btn-light " href="/" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Compare"><i className="bi bi-arrow-left-right"></i></a>
-                    <a className="btn btn-light " href="shop-wishlist.html" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Wishlist"><i className="feather-icon icon-heart"></i></a>
-                </div>
-                </div>
+                <Form onSubmit={e => addToCart(e)}>
+                    <div className="fs-4">
+                    {/*<!-- price -->*/}
+                    <span className="fw-bold text-dark">
+                        {price}
+                    </span> 
+                    <span className="text-decoration-line-through text-muted">
+                        {comparePrice}
+                    </span>
+                    <span>
+                        <small className="fs-6 ms-2 text-danger">26%
+                        Off
+                        </small>
+                    </span>
+                    </div>
+                {/*<!-- hr -->*/}
+                    <hr className="my-6"/>
+                    {/*<div className="mb-5">
+                    <button type="button" className="btn btn-outline-secondary">250g</button>
+                    <button type="button" className="btn btn-outline-secondary">500g</button>
+                    <button type="button" className="btn btn-outline-secondary">1kg</button>
+                    </div>*/}
+                    <div>
+                    {/*<!-- input -->*/}
+                    <div className="input-group input-spinner">
+                        <input defaultChecked={true} type="button" defaultValue="-" className="button-minus  btn  btn-sm " data-field="quantity"/>
+                        <input defaultChecked={true} type="number" step="1" min="1" max="10" defaultValue="1" name="quantity" className="quantity-field form-control-sm form-input"/>
+                        <input defaultChecked={true} type="button" defaultValue="+" className="button-plus btn btn-sm " data-field="quantity"/>
+                    </div>
+                    </div>
+                    <div className="mt-3 row justify-content-start g-2 align-items-center">
+                    <div className="col-xxl-4 col-lg-4 col-md-5 col-5 d-grid">
+                        {/*<!-- button -->*/}
+                        {/*<!-- btn -->*/} 
+                        <button type="submit" className="btn btn-primary">
+                            <i className="feather-icon icon-shopping-bag me-2"></i>
+                            Add tocart
+                        </button>
+                    </div>
+                        <div className="col-md-4 col-4">
+                            {/*<!-- btn -->*/}
+                            <a className="btn btn-light " href="/" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Compare"><i className="bi bi-arrow-left-right"></i></a>
+                            <a className="btn btn-light " href="shop-wishlist.html" data-bs-toggle="tooltip" data-bs-html="true" aria-label="Wishlist"><i className="feather-icon icon-heart"></i></a>
+                        </div>
+                    </div>
+                </Form>
+                {!loading ?
+                <button onClick={e => addToCart(e)} type="button" className="btn btn-primary">
+                    <i className="feather-icon icon-shopping-bag me-2"></i>
+                    Add tocart
+                </button>
+                :
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            }
                {/*<!-- hr -->*/}
                 <hr className="my-6"/>
                 <div>
@@ -125,9 +162,13 @@ const Details = ({name,img, price, comparePrice}) => {
                             <td>Product Code:</td>
                             <td>FBB00255</td>
                         </tr>
-                        <tr>
-                            <td>Availability:</td>
-                            <td>In Stock</td>
+                        <tr>{quantity > 0 ?
+                            (<><td>Availability:</td>
+                            <td>In Stock</td></>)
+                            :
+                            (<><td>Availability:</td>
+                            <td>out of stock</td></>)
+                            }
                         </tr>
                         <tr>
                             <td>Type:</td>

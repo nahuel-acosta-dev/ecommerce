@@ -10,6 +10,7 @@ import ResetPassword from './pages/auth/ResetPassword';
 import ResetPasswordConfirm from './pages/auth/ResetPasswordConfirm';
 
 import Home from './pages/Home';
+import Cart from './pages/Cart';
 import Error404 from './pages/errors/Error404';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
@@ -24,6 +25,7 @@ function App() {
           {/*es importante que siempre este arriba*/}
           <Route path='*' element={<Error404/>}/>
           <Route exact path='/' element={<Home/>}/>
+          <Route exact path='/cart' element={<Cart/>}/>
 
           {/* Authentication  */}
           <Route exact path='/signup' element={<Signup/>}/>
