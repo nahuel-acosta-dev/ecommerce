@@ -15,6 +15,7 @@ import Error404 from './pages/errors/Error404';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
 import Search from './pages/Search';
+import Checkout from './pages/Checkout';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path='*' element={<Error404/>}/>
           <Route exact path='/' element={<Home/>}/>
           <Route exact path='/cart' element={<Cart/>}/>
+          <Route exact path='/checkout' element={<Checkout/>}/>
 
           {/* Authentication  */}
           <Route exact path='/signup' element={<Signup/>}/>

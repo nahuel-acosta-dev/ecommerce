@@ -89,8 +89,6 @@ const CustomNavbar = ({
    return <Navigate to="/search" />
   }
 
-  console.log(categories)
-
     return(
       <>
       <Navbar bg="dark" variant="dark">
