@@ -97,7 +97,10 @@ const Cart = ({
                 </Col>
                 <Col className="text-center">
                     {checkoutButton()}
-                    <WishlistItems/>
+                    <WishlistItems 
+                    compareAmount={compare_amount.toFixed(2)}
+                    amount={amount}
+                    />
                 </Col>
             </Row>
         </Layout>

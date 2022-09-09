@@ -14,7 +14,8 @@ const CustomNavbar = ({
   logout,
   get_categories,
   categories,
-  get_search_products
+  get_search_products,
+  total_items
 }) => {
 
   const [redirect, setRedirect] = useState(false);
@@ -102,7 +103,7 @@ const CustomNavbar = ({
               height="30"
               className="d-inline-block align-top"
             />{' '}
-            React Bootstrap
+            Bootstrap
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -118,7 +119,14 @@ const CustomNavbar = ({
               <Link to="/shop" className="nav-link">Shop</Link>
             </li>
             <li className="nav-item">
-              <Link to="/cart" className="nav-link">Cart</Link>
+              <Link to="/cart" className="nav-link">Cart 
+              <span className="text-danger"> {
+              total_items < 10 ? 
+                total_items
+                :
+                <>+9</>
+              }</span>
+              </Link>
             </li>
             <li className="nav-item">
               <Link to="/signup" className="nav-link">Signup</Link>
@@ -172,7 +180,8 @@ const CustomNavbar = ({
 const mapStateToProps = (state) => ({
   isAuthenticated: state.Auth.isAuthenticated,
   user: state.Auth.user,
-  categories: state.Categories.categories
+  categories: state.Categories.categories,
+  total_items: state.Cart.total_items
 })
 
 
