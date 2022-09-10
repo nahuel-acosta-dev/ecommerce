@@ -43,13 +43,19 @@ const CustomNavbar = ({
     setRender(!render);
   }
 
+  if(render){
+    return <Navigate to="/search" />
+   }
+ 
+
   const logoutHandler = () => {
     logout();
     setRedirect(true);
   }
 
   if (redirect){
-    window.location.reload(false)
+    window.location.reload(false);
+    window.scrollTo(0, 0);
     return <Navigate to='/' />;
   }
 
@@ -82,11 +88,6 @@ const CustomNavbar = ({
         <Button variant="primary">Sign up</Button>
       </div>
     )
-  }
-
-
-  if(render){
-   return <Navigate to="/search" />
   }
 
     return(

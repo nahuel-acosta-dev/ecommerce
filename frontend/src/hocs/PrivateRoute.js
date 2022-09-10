@@ -3,7 +3,7 @@ import {Route, Navigate} from 'react-router';
 import {connect} from 'react-redux';
 
 const PrivateRoute = ({
-    component: Component,
+    element: Element,
     auth: {isAuthenticated, loading},
     ...rest
 }) => {
@@ -13,9 +13,8 @@ const PrivateRoute = ({
         render={props => !isAuthenticated && !loading ?
         (<Navigate to='/login'/>)
         :
-        (<Component {...props}/>)
+        (<Element {...props}/>)
         }/>
-
    )
 }
 

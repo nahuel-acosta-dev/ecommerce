@@ -1,6 +1,7 @@
-import React from 'react';
+import {Button} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 
-const WishlistItems = ({compareAmount, amount}) => {
+const WishlistItems = ({compareAmount, amount, children}) => {
 
     return(
         <div className="col-12">
@@ -13,6 +14,12 @@ const WishlistItems = ({compareAmount, amount}) => {
                     {/*<!-- list group -->*/}
                     <ul className="list-group list-group-flush">
                         {/*<!-- list group item -->*/}
+                        <li className="list-group-item d-flex justify-content-between align-items-start">
+                        <div className="me-auto">
+                            {children}
+                        </div>
+                        <span>${compareAmount}</span>
+                        </li>
                         <li className="list-group-item d-flex justify-content-between align-items-start">
                         <div className="me-auto">
                             <div>Item Subtotal</div>
@@ -37,9 +44,14 @@ const WishlistItems = ({compareAmount, amount}) => {
                 </div>
                 <div className="d-grid mb-1 mt-4">
                     {/*<!-- btn -->*/}
-                    <button className="btn btn-primary btn-lg d-flex justify-content-between align-items-center" 
-                    type="submit">
-                    Go to Checkout <span className="fw-bold">${amount}</span></button>
+                    <Link to="/checkout"
+                    className="btn btn-primary 
+                    btn-lg d-flex 
+                    justify-content-between align-items-center 
+                    text-decoration-none"
+                    >
+                        Go to Checkout <span className="fw-bold">${amount}</span>
+                    </Link>
                 </div>
                 {/*<!-- text -->*/}
                 <p>

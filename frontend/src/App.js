@@ -16,6 +16,7 @@ import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
 import Search from './pages/Search';
 import Checkout from './pages/Checkout';
+import PrivateRoute from './hocs/PrivateRoute';
 
 function App() {
   return (
