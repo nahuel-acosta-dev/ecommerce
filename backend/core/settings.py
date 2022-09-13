@@ -64,7 +64,7 @@ DJANGO_APPS = [
 
 PROJECT_APPS = ['apps.user']
 ECOMMERCE_APPS = ['apps.category',
-                  'apps.product', 'apps.cart', 'apps.shipping', 'apps.orders']
+                  'apps.product', 'apps.cart', 'apps.shipping', 'apps.orders', 'apps.payment']
 THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
@@ -277,6 +277,11 @@ DJOSER = {
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     },
 }
+
+BT_ENVIRONMENT = os.environ.get('BT_ENVIRONMENT')
+BT_MERCHANT_ID = os.environ.get('BT_MERCHANT_ID')
+BT_PUBLIC_KEY = os.environ.get('BT_PUBLIC_KEY')
+BT_PRIVATE_KEY = os.environ.get('BT_PRIVATE_KEY')
 
 ################################
 
