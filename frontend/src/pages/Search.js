@@ -16,7 +16,8 @@ const Search = ({get_categories,
     get_products, 
     products,
     get_filtered_products,
-    searched_products
+    searched_products,
+    filtered_products
 
 }) => {
     const [filtered, setFiltered] = useState(false);
@@ -52,7 +53,21 @@ const Search = ({get_categories,
         let results = [];
         let display = [];
 
-        if (searched_products && 
+        if (
+            filtered_products &&
+            filtered_products !== null &&
+            filtered_products !== undefined &&
+            filtered
+          ) {
+            filtered_products.map((product, index) => {
+                return display.push(
+                    <div key={index}>
+                        <Card id={product.id} name={product.name} description={product.description} 
+                            img={product.get_thumbnail} price={product.price} comparePrice={product.compare_price}/>
+                    </div>
+                );
+            });
+          } else if (searched_products && 
             searched_products !== null && 
             searched_products !== undefined) {
                 searched_products.map((product, i) => {

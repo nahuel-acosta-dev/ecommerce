@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Container, Form, Navbar, Nav, NavDropdown} from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {Navigate} from 'react-router';
 import {connect} from 'react-redux';
 import {logout} from '../../redux/actions/auth';
@@ -19,6 +19,7 @@ const CustomNavbar = ({
 }) => {
 
   const [redirect, setRedirect] = useState(false);
+  const [window, setWindow] = useState(false);
 
   const [render, setRender] = useState(false);
   const [formData, setFormData] = useState({
@@ -62,15 +63,8 @@ const CustomNavbar = ({
 
   const authLinks = () => {
     return(
-      <NavDropdown title="Dropdown" id="basic-nav-dropdown" variant="success"
-      style={{color: 'white'}}
-      >
-        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">
-          Another action
-        </NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-        <NavDropdown.Divider />
+      <NavDropdown title={<i className="bi bi-person"></i>} id="basic-nav-dropdown" variant="success"
+      style={{color: 'white'}}>
         <Button 
         onClick={logoutHandler}
         variant="link" 
@@ -83,96 +77,134 @@ const CustomNavbar = ({
 
   const guestLinks = () => {
     return(
-      <div className="d-flex">
-        <Button variant="outline-info" style={{'marginRight': "10px"}}>Sign in</Button>
-        <Button variant="primary">Sign up</Button>
-      </div>
+      <NavDropdown title={<i className="bi bi-person"></i>} id="basic-nav-dropdown" variant="success"style={{color: 'white'}}>
+        <li>
+          <Link to="/login" className="dropdown-item">
+            Login
+          </Link>
+        </li>
+        <li>
+          <Link to="/signup" className="dropdown-item">
+            Register
+          </Link>
+        </li>
+      </NavDropdown>
+    )
+  }
+
+  const navSearch = () => {
+    return(
+      <NavDropdown title={<i className="bi bi-search"></i>} id="basic-nav-dropdown" variant="success"
+      style={{color: 'white'}}>
+        
+        <Form className="d-flex" onSubmit={e => submit(e)}>
+          <Form.Select aria-label="Default select example" 
+          onChange={e => onChangeHandler(e)}
+          name="category_id">
+            <option value={0}>All</option>
+            {
+              categories &&
+              categories !== null &&
+              categories !== undefined &&
+              categories.map((category, i) => (
+                <option key={i} value={category.id}>
+                  {category.name}
+                </option>
+              ))
+            }
+          </Form.Select>
+            <Form.Control
+              type="search"
+              name="search"
+              onChange={e => onChangeHandler(e)}
+              value={search}
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+              required
+            />
+            <Button variant="outline-success" type="submit">Search</Button>
+          </Form>
+        
+      </NavDropdown>
     )
   }
 
     return(
-      <>
-      <Navbar bg="dark" variant="dark">
+      <div  className={`${window && "fixed-top"}`}>
+      <Navbar variant="white" className="navbar" expand="lg">
         <Container>
-          <Navbar.Brand href="/">
-            <img
-              alt=""
-              src="/logo.svg"
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />{' '}
-            Bootstrap
-          </Navbar.Brand>
+          <Link to="/" className="navbar-brand">
+            Tongo
+          </Link>
           <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
+          <Navbar.Collapse id="navbarScroll">
+          <Nav className="me-auto my-2 my-lg-0"></Nav>
           <Nav
-            className="me-auto my-2 my-lg-0"
+            className="me-auto my-lg-0"
             style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
+            navbarScroll>
             <li className="nav-item">
-              <Link to="/" className="nav-link active">Home</Link>
+              <Link to="/" className="nav-link">Home</Link>
             </li>
             <li className="nav-item">
               <Link to="/shop" className="nav-link">Shop</Link>
             </li>
             <li className="nav-item">
-              <Link to="/cart" className="nav-link">Cart 
-              <span className="text-danger"> {
-              total_items < 10 ? 
-                total_items
-                :
-                <>+9</>
-              }</span>
-              </Link>
+              <Link to="/shop" className="nav-link">Sale</Link>
             </li>
             <li className="nav-item">
-              <Link to="/signup" className="nav-link">Signup</Link>
+              <Link to="/shop" className="nav-link">About</Link>
             </li>
-            <li className="nav-item">
-              <Link to="/login" className="nav-link">Login</Link>
-            </li>
-            <Form className="d-flex" onSubmit={e => submit(e)}>
-            <Form.Select aria-label="Default select example" 
-            onChange={e => onChangeHandler(e)}
-            name="category_id">
-              <option value={0}>All</option>
-              {
-                categories &&
-                categories !== null &&
-                categories !== undefined &&
-                categories.map((category, i) => (
-                  <option key={i} value={category.id}>
-                    {category.name}
-                  </option>
-                ))
-              }
-            </Form.Select>
-              <Form.Control
-                type="search"
-                name="search"
-                onChange={e => onChangeHandler(e)}
-                value={search}
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-                required
-              />
-              <Button variant="outline-success" type="submit">Search</Button>
-          </Form>
           </Nav>
-          {
-            isAuthenticated ?
-            authLinks()
-            :
-            guestLinks()
-          }
+          <Nav>
+              <li className="nav-item">
+                  {navSearch()}
+              </li>
+              <li className="nav-item">
+                {isAuthenticated ?
+                  authLinks()
+                  :
+                  guestLinks()
+                }
+              </li>
+              <li className="nav-item">
+                <Link to="/cart" className="nav-link"> 
+                  <i className="bi bi-heart"></i>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/cart" className="nav-link"> 
+                  <span>            
+                    <i className="bi bi-cart"> 
+                      <i className="text-white navbar__items text-bg-dark">
+                        {
+                        total_items < 10 ? 
+                            total_items
+                          :
+                          <>
+                            +9
+                          </> 
+                        }
+                      </i>
+                    </i>
+                  </span>  
+                </Link>
+              </li>
+            </Nav>
         </Navbar.Collapse>
         </Container>
       </Navbar>
+      {window && <Button onClick={() => setWindow(!window)}>
+        abrir
+      </Button>}
+        <Navbar className={`window bg-dark ${window && "window_expanded"}`}>
+              {
+                window && <>hola</>
+              }
+        </Navbar>
       <CustomAlert />
-      </>
+      </div>
     )
 }
 
