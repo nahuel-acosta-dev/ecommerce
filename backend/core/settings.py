@@ -74,6 +74,7 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'ckeditor',
     'ckeditor_uploader',
+    'drf_yasg',
 ]
 
 CKEDITOR_CONFIGS = {

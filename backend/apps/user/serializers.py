@@ -1,11 +1,11 @@
-from djoser.serializers import UserCreateSerializer
+from djoser.serializers import UserCreateSerializer as UserCreateSerializers
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class UserCreateSerializer(UserCreateSerializer):
-    class Meta(UserCreateSerializer.Meta):
+class UserCreateSerializer(UserCreateSerializers):
+    class Meta(UserCreateSerializers.Meta):
         model = User
         fields = (
             'id',
