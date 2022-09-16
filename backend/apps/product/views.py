@@ -21,7 +21,9 @@ class ProductDetailView(GenericAPIView):
 
     def get(self, request, productId, format=None):
         """
-            Retorna el producto solicitado
+            es importante documentar todos los endpoints,
+            como por ejemplo con la devolucion que hace al ser llamada.
+            Retorna el producto solicitado.
 
             params.
             name ----> id de producto

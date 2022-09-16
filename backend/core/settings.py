@@ -200,6 +200,11 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 12
 }
 
+
+SWAGGER_SETTINGS = {
+    'DOC_EXPANSION': 'name'
+}
+
 # authentication OAuth
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
