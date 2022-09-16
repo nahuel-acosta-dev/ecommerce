@@ -13,7 +13,7 @@ export const get_categories = () => async dispatch => {
     };
 
     try{
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/category/categories`, config)
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/category/categories`, config)
         if(res.status === 200){
             dispatch({
                 type: GET_CATEGORIES_SUCCESS,

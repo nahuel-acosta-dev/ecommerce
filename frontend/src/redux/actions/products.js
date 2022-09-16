@@ -24,7 +24,7 @@ export const get_products = () => async dispatch => {
     };
 
     try { 
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/get-products`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-products`, config);
     
         if (res.status === 200) {
             dispatch({
@@ -52,7 +52,7 @@ export const get_products_by_arrival = () => async dispatch => {
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/get-products?sortBy=date_created&order=desc&limit=3`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-products?sortBy=date_created&order=desc&limit=3`, config);
     
         if (res.status === 200) {
             dispatch({
@@ -79,7 +79,7 @@ export const get_products_by_sold = () => async dispatch => {
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/get-products?sortBy=sold&order=desc&limit=3`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-products?sortBy=sold&order=desc&limit=3`, config);
 
         if (res.status === 200) {
             dispatch({
@@ -106,7 +106,7 @@ export const get_product = (productId) => async dispatch => {
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/product/${productId}`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/product/${productId}`, config);
 
         if (res.status === 200) {
             dispatch({
@@ -133,7 +133,7 @@ export const get_related_products = (productId) => async dispatch => {
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/related/${productId}`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/related/${productId}`, config);
 
         if (res.status === 200 && !res.data.error) {
             dispatch({
@@ -169,7 +169,7 @@ export const get_filtered_products = (category_id, price_range, sort_by, order) 
     });
 
     try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/product/by/search`, body, config);
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/by/search`, body, config);
 
         if (res.status === 200 && !res.data.error) {
             dispatch({
@@ -202,7 +202,7 @@ export const get_search_products = (search, category_id) => async dispatch => {
     });
 
     try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/product/search`, body, config);
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/search`, body, config);
 
         if (res.status === 200) {
             dispatch({
