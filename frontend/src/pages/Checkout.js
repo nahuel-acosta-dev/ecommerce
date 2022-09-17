@@ -4,6 +4,7 @@ import {Navigate} from 'react-router';
 import {connect} from 'react-redux';
 import CartItem from '../components/shop/CartItem';
 import WishlistItems from '../components/shop/WishListItems';
+import Paypal from '../components/payment/Paypal'
 import {Link} from 'react-router-dom';
 import {Row, Col, Form} from 'react-bootstrap';
 import { 
@@ -128,21 +129,25 @@ const Checkout = ({get_items,
                     >
                         {
                             shipping && shipping !== null && shipping !== undefined &&
-                            <Form>
-                            <div key={`default-radio`} className="mb-3">
-                                {shipping.map((ship, i) => (
-                                    <Form.Check 
-                                    type='radio'
-                                    value={ship.id}
-                                    label={`${ship.name} - ${ship.price} (${ship.time_to_delivery})`}
-                                    required
-                                    />
-    
-                                ))}
+                            <><Form>
+                                <div key={`default-radio`} className="mb-3">
+                                    {shipping.map((ship, i) => (
+                                        <Form.Check 
+                                        key={i}
+                                        type='radio'
+                                        value={ship.id}
+                                        label={`${ship.name} - ${ship.price} (${ship.time_to_delivery})`}
+                                        required
+                                        />
+        
+                                    ))}
+                                </div>
                                 
-                            </div>
-                        </Form>}
+                            </Form>
+                            </>
+                            }
                     </WishlistItems>
+                    <Paypal/>
                 </Col>
             </Row>
         </Layout>
