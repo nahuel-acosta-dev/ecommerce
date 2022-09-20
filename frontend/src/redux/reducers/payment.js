@@ -1,8 +1,6 @@
 import {
     GET_PAYMENT_TOTAL_SUCCESS,
     GET_PAYMENT_TOTAL_FAIL,
-    LOAD_BT_TOKEN_SUCCESS,
-    LOAD_BT_TOKEN_FAIL,
     PAYMENT_SUCCESS,
     PAYMENT_FAIL,
     RESET_PAYMENT_INFO,
@@ -12,7 +10,6 @@ import {
 
 
 const initialState = {
-    clientToken: null,
     made_payment: false,
     original_price: 0.0,
     total_after_coupon: 0.0,
