@@ -16,6 +16,7 @@ import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
 import Search from './pages/Search';
 import Checkout from './pages/Checkout';
+import ThankYou from './pages/ThankYou';
 import PrivateRoute from './hocs/PrivateRoute';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route exact path='/shop' element={<Shop/>}/>
           <Route exact path='/product/:productId' element={<ProductDetail/>}/>
           <Route exact path='/search' element={<Search/>}/>
+          <Route exact path='/thankyou' element={<ThankYou/>}/>
         </Routes>
       </Router>
     </Provider>

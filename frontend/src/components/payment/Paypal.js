@@ -4,7 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 const Paypal = () => {
 
     return (
-        <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
+        <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID}}>
             <Toaster />
             <PayPalButtons style={{ layout: "horizontal" }} 
             createOrder={(data, actions) => {

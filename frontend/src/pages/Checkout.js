@@ -2,10 +2,12 @@ import React,{useState,useEffect} from 'react';
 import Layout from '../hocs/Layout';
 import {Navigate} from 'react-router';
 import {connect} from 'react-redux';
+import { setAlert } from '../redux/actions/alert'
 import CartItem from '../components/shop/CartItem';
 import WishlistItems from '../components/shop/WishListItems';
 import Paypal from '../components/payment/Paypal'
 import {Link} from 'react-router-dom';
+import {refresh} from '../redux/actions/auth';
 import {Row, Col, Form} from 'react-bootstrap';
 import { 
     get_items, 
@@ -14,9 +16,14 @@ import {
     remove_item,
     update_item
 } from '../redux/actions/cart';
+import {
+    get_payment_total,
+    process_payment
+  } from '../redux/actions/payment';
 import {get_shipping_options} from '../redux/actions/shipping';
 
-const Checkout = ({get_items, 
+const Checkout = ({
+    get_items, 
     get_total, 
     get_item_total,
     isAuthenticated,
@@ -34,8 +41,6 @@ const Checkout = ({get_items,
         window.scrollTo(0,0)
         get_shipping_options()
     }, [])
-
-    const [render, setRender] = useState(false);
 
     const [formData, setFormData] = useState({
         full_name: '',
@@ -59,9 +64,19 @@ const Checkout = ({get_items,
         postal_zip_code,
         country_region,
         telephone_number,
-        coupon_name,
         shipping_id,
     } = formData;
+
+    useEffect(() => {
+        /*if (coupon && coupon !== null && coupon !== undefined)
+            get_payment_total(shipping_id, coupon.name);
+        else*/
+            get_payment_total(shipping_id, 'default');
+      }, [shipping_id]);
+
+    const [render, setRender] = useState(false);
+
+    
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -156,18 +171,31 @@ const Checkout = ({get_items,
 
 const mapStateToProps = state => ({
     isAuthenticated: state.Auth.isAuthenticated,
+    user: state.Auth.user,
     items: state.Cart.items,
-    amount: state.Cart.amount,
-    compare_amount: state.Cart.compare_amount,
     total_items: state.Cart.total_items,
-    shipping: state.Shipping.shipping
+    shipping: state.Shipping.shipping,
+    clientToken: state.Payment.clientToken,
+    made_payment: state.Payment.made_payment,
+    loading: state.Payment.loading,
+    original_price: state.Payment.original_price,
+    total_after_coupon: state.Payment.total_after_coupon,
+    total_amount: state.Payment.total_amount,
+    total_compare_amount: state.Payment.total_compare_amount,
+    estimated_tax: state.Payment.estimated_tax,
+    shipping_cost: state.Payment.shipping_cost,
+    compare_amount: state.Cart.compare_amount,
 })
 
-export default connect(mapStateToProps, {
-    get_items, 
-    get_total, 
+export default connect(mapStateToProps,{
+    get_items,
+    get_total,
     get_item_total,
-    remove_item,
     update_item,
-    get_shipping_options
-}) (Checkout);
+    remove_item,
+    setAlert,
+    get_shipping_options,
+    refresh,
+    get_payment_total,
+    process_payment,
+}) (Checkout)
