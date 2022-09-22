@@ -1,148 +1,70 @@
+import json
 from django.shortcuts import render
 from django.conf import settings
+from django.core.mail import send_mail
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import (api_view, permission_classes, action)
 from apps.cart.models import Cart, CartItem
 #from apps.coupons.models import FixedPriceCoupon, PercentageCoupon
 from apps.orders.models import Order, OrderItem
 from apps.product.models import Product
 from apps.shipping.models import Shipping
-from django.core.mail import send_mail
-import braintree
+from paypalcheckoutsdk.core import SandboxEnvironment
+import paypalrestsdk
+import logging
 
-gateway = braintree.BraintreeGateway(
-    braintree.Configuration(
-        environment=settings.BT_ENVIRONMENT,
-        merchant_id=settings.BT_MERCHANT_ID,
-        public_key=settings.BT_PUBLIC_KEY,
-        private_key=settings.BT_PRIVATE_KEY
-    )
-)
+FRONTEND = settings.FRONTEND
 
+PP_ENVIRONMENT = settings.PP_ENVIRONMENT
+PP_SECRET = settings.PP_SECRET
+PP_CLIENT_ID = settings.PP_CLIENT_ID
 
-class GenerateTokenView(APIView):
-    def get(self, request, format=None):
-        try:
-            token = gateway.client_token.generate()
-
-            return Response(
-                {'braintree_token': token},
-                status=status.HTTP_200_OK
-            )
-        except:
-            return Response(
-                {'error': 'Something went wrong when retrieving braintree token'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+logger = logging.getLogger(__name__)
 
 
-class GetPaymentTotalView(APIView):
-    def get(self, request, format=None):
-        user = self.request.user
+my_api = paypalrestsdk.Api({
+    "mode": PP_ENVIRONMENT,  # sandbox or live
+    "client_id": PP_CLIENT_ID,
+    "client_secret": PP_SECRET})
 
-        tax = 0.18
+#payment = paypalrestsdk.Payment({...}, api=my_api)
+# https://github.com/paypal/Payouts-Python-SDK
 
-        shipping_id = request.query_params.get('shipping_id')
-        shipping_id = str(shipping_id)
+"""
+class CreatePaymentRequest(APIView):
+    def post(self, request, format=None):
+        my_api = paypalrestsdk.Api({
+            "mode": PP_ENVIRONMENT,  # sandbox or live
+            "client_id": PP_CLIENT_ID,  # request.client_id
+            "client_secret": PP_SECRET})
 
-        coupon_name = request.query_params.get('coupon_name')
-        coupon_name = str(coupon_name)
+        payment = paypalrestsdk.Payment({
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"},
+            "redirect_urls": {
+                "return_url": "http://localhost:3000/payment/execute",
+                "cancel_url": "http://localhost:3000/"},
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "item",
+                        "sku": "item",
+                        "price": "5.00",
+                        "currency": "USD",
+                        "quantity": 1}]},
+                "amount": {
+                    "total": "5.00",
+                    "currency": "USD"},
+                "description": "This is the payment transaction description."}]})
 
-        try:
-            cart = Cart.objects.get(user=user)
-
-            # revisar si existen iitems
-            if not CartItem.objects.filter(cart=cart).exists():
-                return Response(
-                    {'error': 'Need to have items in cart'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-
-            cart_items = CartItem.objects.filter(cart=cart)
-
-            for cart_item in cart_items:
-                if not Product.objects.filter(id=cart_item.product.id).exists():
-                    return Response(
-                        {'error': 'A proudct with ID provided does not exist'},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-                if int(cart_item.count) > int(cart_item.product.quantity):
-                    return Response(
-                        {'error': 'Not enough items in stock'},
-                        status=status.HTTP_200_OK
-                    )
-
-                total_amount = 0.0
-                total_compare_amount = 0.0
-
-                for cart_item in cart_items:
-                    total_amount += (float(cart_item.product.price)
-                                     * float(cart_item.count))
-                    total_compare_amount += (float(cart_item.product.compare_price)
-                                             * float(cart_item.count))
-
-                total_compare_amount = round(total_compare_amount, 2)
-                original_price = round(total_amount, 2)
-
-                # Cupones
-                if coupon_name != '':
-                    # Revisar si cupon de precio fijo es valido
-                    if FixedPriceCoupon.objects.filter(name__iexact=coupon_name).exists():
-                        fixed_price_coupon = FixedPriceCoupon.objects.get(
-                            name=coupon_name
-                        )
-                    discount_amount = float(fixed_price_coupon.discount_price)
-                    if discount_amount < total_amount:
-                        total_amount -= discount_amount
-                        total_after_coupon = total_amount
-
-                    elif PercentageCoupon.objects.filter(name__iexact=coupon_name).exists():
-                        percentage_coupon = PercentageCoupon.objects.get(
-                            name=coupon_name
-                        )
-                        discount_percentage = float(
-                            percentage_coupon.discount_percentage)
-
-                        if discount_percentage > 1 and discount_percentage < 100:
-                            total_amount -= (total_amount *
-                                             (discount_percentage / 100))
-                            total_after_coupon = total_amount
-
-                # Total despues del cupon
-                total_after_coupon = round(total_after_coupon, 2)
-
-                # Impuesto estimado
-                estimated_tax = round(total_amount * tax, 2)
-
-                total_amount += (total_amount * tax)
-
-                shipping_cost = 0.0
-                # verificar que el envio sea valido
-                if Shipping.objects.filter(id__iexact=shipping_id).exists():
-                    # agregar shipping a total amount
-                    shipping = Shipping.objects.get(id=shipping_id)
-                    shipping_cost = shipping.price
-                    total_amount += float(shipping_cost)
-
-                total_amount = round(total_amount, 2)
-
-                return Response({
-                    'original_price': f'{original_price:.2f}',
-                    'total_after_coupon': f'{total_after_coupon:.2f}',
-                    'total_amount': f'{total_amount:.2f}',
-                    'total_compare_amount': f'{total_compare_amount:.2f}',
-                    'estimated_tax': f'{estimated_tax:.2f}',
-                    'shipping_cost': f'{shipping_cost:.2f}'
-                },
-                    status=status.HTTP_200_OK
-                )
-
-        except:
-            return Response(
-                {'error': 'Something went wrong when retrieving payment total information'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+        if payment.create():
+            print("Payment created successfully")
+        else:
+            print(payment.error)"""
 
 
 class ProcessPaymentView(APIView):
@@ -152,9 +74,9 @@ class ProcessPaymentView(APIView):
 
         tax = 0.18
 
-        nonce = data['nonce']
+        #nonce = data['nonce']
         shipping_id = str(data['shipping_id'])
-        coupon_name = str(data['coupon_name'])
+        #coupon_name = str(data['coupon_name'])
 
         full_name = data['full_name']
         address_line_1 = data['address_line_1']
@@ -204,7 +126,7 @@ class ProcessPaymentView(APIView):
                              * float(cart_item.count))
 
         # Cupones
-        if coupon_name != '':
+        """if coupon_name != '':
             if FixedPriceCoupon.objects.filter(name__iexact=coupon_name).exists():
                 fixed_price_coupon = FixedPriceCoupon.objects.get(
                     name=coupon_name
@@ -213,7 +135,7 @@ class ProcessPaymentView(APIView):
 
                 if discount_amount < total_amount:
                     total_amount -= discount_amount
-
+            
             elif PercentageCoupon.objects.filter(name__iexact=coupon_name).exists():
                 percentage_coupon = PercentageCoupon.objects.get(
                     name=coupon_name
@@ -223,7 +145,7 @@ class ProcessPaymentView(APIView):
 
                 if discount_percentage > 1 and discount_percentage < 100:
                     total_amount -= (total_amount *
-                                     (discount_percentage / 100))
+                                     (discount_percentage / 100))"""
 
         total_amount += (total_amount * tax)
 
@@ -238,7 +160,7 @@ class ProcessPaymentView(APIView):
 
         try:
             # Crear transaccion con braintree
-            newTransaction = gateway.transaction.sale(
+            """newTransaction = my_api.transaction.sale(
                 {
                     'amount': str(total_amount),
                     'payment_method_nonce': str(nonce['nonce']),
@@ -246,7 +168,40 @@ class ProcessPaymentView(APIView):
                         'submit_for_settlement': True
                     }
                 }
-            )
+            )"""
+
+            payment = paypalrestsdk.Payment({
+                "intent": "sale",
+                "payer": {
+                    "payment_method": "paypal"},
+                "redirect_urls": {
+                    "return_url": "http://localhost:3000/payment/execute",
+                    "cancel_url": "http://localhost:3000/"},
+                "transactions": [{
+                    "item_list": {
+                        "items": [
+                            {
+                                "name": "item",
+                                "sku": "item",
+                                "price": "1.00",
+                                "currency": "USD",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    "amount": {
+                        "total": total_amount,
+                        "currency": "USD"},
+                    "description": "This is the payment transaction description."}]})
+
+            if payment.create():
+                print("Payment created successfully")
+            else:
+                print(payment.error)
+                return Response(
+                    {'error': 'Error processing the transaction'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
         except:
             return Response(
                 {'error': 'Error processing the transaction'},
@@ -319,7 +274,7 @@ class ProcessPaymentView(APIView):
                     + '\n\nYou can go on your user dashboard to check the status of your order.'
                     + '\n\nSincerely,'
                     + '\nShop Time',
-                    'mail@ninerogues.com',
+                    'brianacostanahuel@gmail.com',
                     [user.email],
                     fail_silently=False
                 )
@@ -349,4 +304,113 @@ class ProcessPaymentView(APIView):
             return Response(
                 {'error': 'Transaction failed'},
                 status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class GetPaymentTotalView(APIView):
+    def get(self, request, format=None):
+        user = self.request.user
+
+        tax = 0.18
+
+        shipping_id = request.query_params.get('shipping_id')
+        shipping_id = str(shipping_id)
+
+        #coupon_name = request.query_params.get('coupon_name')
+        #coupon_name = str(coupon_name)
+
+        try:
+            cart = Cart.objects.get(user=user)
+
+            # revisar si existen iitems
+            if not CartItem.objects.filter(cart=cart).exists():
+                return Response(
+                    {'error': 'Need to have items in cart'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            cart_items = CartItem.objects.filter(cart=cart)
+
+            for cart_item in cart_items:
+                if not Product.objects.filter(id=cart_item.product.id).exists():
+                    return Response(
+                        {'error': 'A proudct with ID provided does not exist'},
+                        status=status.HTTP_404_NOT_FOUND
+                    )
+                if int(cart_item.count) > int(cart_item.product.quantity):
+                    return Response(
+                        {'error': 'Not enough items in stock'},
+                        status=status.HTTP_200_OK
+                    )
+
+                total_amount = 0.0
+                total_compare_amount = 0.0
+
+                for cart_item in cart_items:
+                    total_amount += (float(cart_item.product.price)
+                                     * float(cart_item.count))
+                    total_compare_amount += (float(cart_item.product.compare_price)
+                                             * float(cart_item.count))
+
+                total_compare_amount = round(total_compare_amount, 2)
+                original_price = round(total_amount, 2)
+
+                # Cupones
+                """
+                if coupon_name != '':
+                    #Revisar si cupon de precio fijo es valido
+                    if FixedPriceCoupon.objects.filter(name__iexact=coupon_name).exists():
+                        fixed_price_coupon = FixedPriceCoupon.objects.get(
+                        name=coupon_name
+                    )
+                    discount_amount = float(fixed_price_coupon.discount_price)
+                    if discount_amount < total_amount:
+                        total_amount -= discount_amount
+                        total_after_coupon = total_amount
+
+                    elif PercentageCoupon.objects.filter(name__iexact=coupon_name).exists():
+                        percentage_coupon = PercentageCoupon.objects.get(
+                            name=coupon_name
+                        )
+                        discount_percentage = float(
+                            percentage_coupon.discount_percentage)
+
+                        if discount_percentage > 1 and discount_percentage < 100:
+                            total_amount -= (total_amount *
+                                            (discount_percentage / 100))
+                            total_after_coupon = total_amount
+
+                #Total despues del cupon 
+                total_after_coupon = round(total_after_coupon, 2)
+
+                # Impuesto estimado
+                estimated_tax = round(total_amount * tax, 2)"""
+
+                total_amount += (total_amount * tax)
+
+                shipping_cost = 0.0
+                # verificar que el envio sea valido
+                if Shipping.objects.filter(id__iexact=shipping_id).exists():
+                    # agregar shipping a total amount
+                    shipping = Shipping.objects.get(id=shipping_id)
+                    shipping_cost = shipping.price
+                    total_amount += float(shipping_cost)
+
+                total_amount = round(total_amount, 2)
+
+                return Response({
+                    'original_price': f'{original_price:.2f}',
+                    # 'total_after_coupon': f'{total_after_coupon:.2f}',
+                    'total_amount': f'{total_amount:.2f}',
+                    'total_compare_amount': f'{total_compare_amount:.2f}',
+                    # 'estimated_tax': f'{estimated_tax:.2f}',
+                    'shipping_cost': f'{shipping_cost:.2f}'
+                },
+                    status=status.HTTP_200_OK
+                )
+
+        except:
+            return Response(
+                {'error': 'Something went wrong when retrieving payment total information'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

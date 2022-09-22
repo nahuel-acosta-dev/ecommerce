@@ -28,11 +28,14 @@ django.utils.encoding.force_text = force_str
 django.utils.http.urlquote = quote
 ##########
 
+"""
+PARA ARREGLAR EL PROBLEMA DE INVALID LINE Y NO LEE LAS VARIABLES DE ENTORNO
+LO QUE DEBO HACER ES BORRAR environ.Env.read_env() de settings, declarar las variables
+de entorno en el .env y posteriormente volver a poner en el settings environ.Env.read_env()
+"""
+
 env = environ.Env()
 environ.Env.read_env()
-
-
-ENVIRONMENT = env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,9 +45,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = os.environ.get('SECRET_KEY')
 DOMAIN = os.environ.get('DOMAIN')
-print(DOMAIN)
+
+FRONTEND = os.environ.get('FRONTEND')
+
+PP_SECRET = os.environ.get('PP_SECRET')
+PP_ENVIRONMENT = os.environ.get('PP_ENVIRONMENT')
+PP_SANDBOX_BUSSINESS_ACCOUNT = os.environ.get('PP_SANDBOX_BUSSINESS_ACCOUNT')
+PP_SANDBOX_PERSONAL_ACCOUNT = os.environ.get('PP_SANDBOX_PERSONAL_ACCOUNT')
+PP_CLIENT_ID = os.environ.get('PP_CLIENT_ID')
+PP_WEBHOOK_ID = os.environ.get('PP_WEBHOOK_ID')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -75,6 +88,7 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'drf_yasg',
+    'paypalcheckoutsdk'
 ]
 
 CKEDITOR_CONFIGS = {
@@ -141,6 +155,9 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://127.0.0.1:8000',
 ]
+
+ALLOWED_HOSTS = ['localhost', '0.0.0.0',
+                 '127.0.0.1', '594b-168-196-143-13.sa.ngrok.io']
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
@@ -283,14 +300,12 @@ DJOSER = {
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     },
 }
-
+"""
 BT_ENVIRONMENT = os.environ.get('BT_ENVIRONMENT')
 BT_MERCHANT_ID = os.environ.get('BT_MERCHANT_ID')
 BT_PUBLIC_KEY = os.environ.get('BT_PUBLIC_KEY')
 BT_PRIVATE_KEY = os.environ.get('BT_PRIVATE_KEY')
-
-################################
-
+"""
 
 AUTH_USER_MODEL = "user.UserAccount"
 
@@ -303,7 +318,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # cambiar acorede a mis necesidades, es decir cambiar por mis datos el defeault
 if not DEBUG:
-    DEFAULT_FROM_EMAIL = 'Vudera - Academia de Software <mail@vudera.com>'
+    DEFAULT_FROM_EMAIL = 'nahuel acosta - <brianacostanahuel2000@gmail.com>'
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = env('EMAIL_HOST')
     EMAIL_HOST_USER = env('EMAIL_HOST_USER')
