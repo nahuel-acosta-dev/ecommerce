@@ -21,7 +21,7 @@ export const get_payment_total = (shipping_id, coupon_name) => async dispatch =>
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/payment/get-payment-total?shipping_id=${shipping_id}`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/payment/get-payment-total?shipping_id=${shipping_id}`, config);
 
         if (res.status === 200 && !res.data.error) {
             dispatch({
@@ -78,7 +78,7 @@ export const process_payment = (
     });
 
     try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/payment/make-payment`, body, config);
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/payment/make-payment`, body, config);
         if (res.status === 200 && res.data.success) {
             dispatch({
                 type: PAYMENT_SUCCESS

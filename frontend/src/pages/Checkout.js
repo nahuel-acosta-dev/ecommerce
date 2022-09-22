@@ -27,6 +27,7 @@ import {get_shipping_options} from '../redux/actions/shipping';
 const Checkout = ({
     get_items, 
     get_total, 
+    total_amount,
     get_item_total,
     isAuthenticated,
     items,
@@ -36,7 +37,18 @@ const Checkout = ({
     remove_item,
     update_item,
     get_shipping_options,
-    shipping
+    get_payment_total,
+    process_payment,
+    shipping,
+
+    refresh,
+    user,
+    made_payment,
+    loading,
+    original_price,
+    total_compare_amount,
+    estimated_tax,
+    shipping_cost,
 }) => {
 
     useEffect(() => {
@@ -54,7 +66,7 @@ const Checkout = ({
         country_region: 'Peru',
         telephone_number: '',
         coupon_name: '',
-        shipping_id: 0,
+        shipping_id: 1,
     });
 
     const { 
@@ -73,7 +85,7 @@ const Checkout = ({
         /*if (coupon && coupon !== null && coupon !== undefined)
             get_payment_total(shipping_id, coupon.name);
         else*/
-            get_payment_total(shipping_id, 'default');
+            get_payment_total(shipping_id, ''); //por algun motivo no ejecuta
       }, [shipping_id]);
 
     const [render, setRender] = useState(false);
@@ -93,8 +105,6 @@ const Checkout = ({
     if(!isAuthenticated){
         return <Navigate to="/"/>
     }
-
-    console.log(shipping)
 
     const showItems = () => (
             <div>
@@ -142,29 +152,45 @@ const Checkout = ({
                 <Col className="text-center">
                     <WishlistItems 
                     compareAmount={compare_amount.toFixed(2)}
-                    amount={amount}
+                    amount={total_amount}
                     >
                         {
                             shipping && shipping !== null && shipping !== undefined &&
-                            <><Form>
-                                <div key={`default-radio`} className="mb-3">
-                                    {shipping.map((ship, i) => (
-                                        <Form.Check 
-                                        key={i}
-                                        type='radio'
-                                        value={ship.id}
-                                        label={`${ship.name} - ${ship.price} (${ship.time_to_delivery})`}
-                                        required
-                                        />
-        
-                                    ))}
-                                </div>
-                                
-                            </Form>
+                            <>
+                            <ShippingForm
+                                full_name={full_name}
+                                address_line_1={address_line_1}
+                                address_line_2={address_line_2}
+                                city={city}
+                                state_province_region={state_province_region}
+                                postal_zip_code={postal_zip_code}
+                                telephone_number={telephone_number}
+                                countries={countries}
+                                onChange={onChange}
+                                user={user}
+                                total_amount={total_amount}
+                                total_compare_amount={total_compare_amount}
+                                estimated_tax={estimated_tax}
+                                shipping_cost={shipping_cost}
+                                shipping_id={shipping_id}
+                                shipping={shipping}
+                             />
                             </>
                             }
                     </WishlistItems>
-                    <Paypal/>
+                    <Paypal 
+                        total={total_amount} 
+                        process_payment={process_payment}
+                        shipping_id={1}
+                        full_name={full_name}
+                        address_line_1={address_line_1}
+                        address_line_2={""}
+                        city={city}
+                        state_province_region={state_province_region}
+                        postal_zip_code={postal_zip_code}
+                        country_region={country_region}
+                        telephone_number={telephone_number}
+                    />
                 </Col>
             </Row>
         </Layout>
